@@ -1,0 +1,27 @@
+# .github/workflows/main.yml
+name: Create Custom Raspbian Image
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Required Packages
+        run: sudo apt-get install -y qemu-user-static binfmt-support
+
+      - name: Customize Image
+        run: sudo ./customize_image.sh  # Your customization script here
+
+      - name: Upload Custom Image
+        uses: actions/upload-artifact@v2
+        with:
+          name: custom-raspbian-image
+          path: ./path/to/your/custom_image.img
+
